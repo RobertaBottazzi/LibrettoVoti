@@ -52,6 +52,22 @@ public class Libretto {
 		return risultato;
 		//restituisce un nuovo libretto che contiene solo i voti pari al punteggio
 	}
+	/**
+	 * Ricerca voto corrispondente del corso di cui è specificato il nome
+	 * se il corso non esiste restituisce null.
+	 * @param nomeCorso
+	 * @return
+	 */
+	public Voto ricercaVoto(String nomeCorso) {
+		Voto risultato=null;
+		for(Voto v: voti) {
+			if(v.getNome().equals(nomeCorso)) {
+				risultato=v;
+				break;
+			}
+		}
+		return risultato;
+	}
 	
 	public String toString() {
 		String s="";
