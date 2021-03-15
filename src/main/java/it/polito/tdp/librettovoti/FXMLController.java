@@ -2,6 +2,7 @@ package it.polito.tdp.librettovoti;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.librettovoti.model.Libretto;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.DatePicker;
 
 public class FXMLController implements Initializable {
     
@@ -32,9 +34,12 @@ public class FXMLController implements Initializable {
 
     @FXML
     private TextField  txtVoto;
-
+    
     @FXML
-    private TextField  txtData;
+    private DatePicker pickerEsame;
+
+    //@FXML
+    //private TextField  txtData;
     
     @FXML
     private TextArea txtResult;
@@ -48,9 +53,32 @@ public class FXMLController implements Initializable {
     		return; //esce e non fa l'operazione sul model che va a modificare i dati essendo questi non validi
     	}
     	String votoEsame=txtVoto.getText();
-    	int votoInt= Integer.parseInt(votoEsame);
-    	String dataEsame= txtData.getText();
-    	LocalDate data=LocalDate.parse(dataEsame);
+    	int votoInt=0;
+    	try {
+    		votoInt= Integer.parseInt(votoEsame);
+    	} catch(NumberFormatException ex) {
+    		txtResult.setText("ERRORE: il voto deve essere un numero");
+    		return;
+    	}
+    	if(votoInt<18 || votoInt>30) {
+    		txtResult.setText("ERRORE: il voto deve essere compreso tra 18 e 30");
+    		return;
+    	}   	
+    	
+    	/*String dataEsame= txtData.getText();
+    	LocalDate data;
+    	try {
+    		data=LocalDate.parse(dataEsame);
+    	} catch(DateTimeParseException ex) {
+    		txtResult.setText("ERRORE: il la data deve essere valida");
+    		return;
+    	}*/
+    	LocalDate data=pickerEsame.getValue();
+    	if(data==null) {
+    		txtResult.setText("ERRORE: la data deve è errata o mancante"); //su scenebuilder mettendo il campo non editabile risolvo il problema di inserire date non valide
+    		return;
+    	}
+    	
     	//TODO: aggiungere tutti i controlli
     	
     	//Esegui l'azione
@@ -59,6 +87,10 @@ public class FXMLController implements Initializable {
     	
     	//Aggiorna i risultati (nella view)
     	txtResult.setText(model.toString());
+    	txtNomeEsame.clear();
+    	txtVoto.clear();
+    	//txtData.clear();
+    	pickerEsame.setValue(null);    	
     }
     
     public void setModel(Libretto model) {
@@ -69,7 +101,8 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     	 assert txtNomeEsame != null : "fx:id=\"txtNomeEsame\" was not injected: check your FXML file 'Scene.fxml'.";
          assert txtVoto != null : "fx:id=\"txtVoto\" was not injected: check your FXML file 'Scene.fxml'.";
-         assert txtData != null : "fx:id=\"txtData\" was not injected: check your FXML file 'Scene.fxml'.";
+        // assert txtData != null : "fx:id=\"txtData\" was not injected: check your FXML file 'Scene.fxml'.";
+         assert pickerEsame != null : "fx:id=\"pickerData\" was not injected: check your FXML file 'Scene.fxml'.";
          assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";  
     } 
     

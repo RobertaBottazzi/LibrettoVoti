@@ -5,14 +5,16 @@ import java.util.*;
 public class Libretto {
 	//svolge il ruolo di Model ossia gestiscono i dati
 	private List<Voto> voti;
-	
+	private Map<String, Voto> votiMap; //identity map: mappa che conserva identità oggetti, quindi nomeEsame sull'oggetto voto
+									
 	public Libretto() {
 		this.voti= new ArrayList<>(); //faccio l'inizializzazione qua e sopra la dichiarazione in modo che
 		                              //se volessi cambiare la tipologia di struttura posso farlo in qualsiasi momento e il programma di adatta
-		
+		this.votiMap= new HashMap<>();
 	}
 	public void add(Voto voto) {
 		this.voti.add(voto);
+		this.votiMap.put(voto.getNome(), voto);
 	}
 	
 	public void stampaVotiUguali(int punteggio) {
@@ -59,14 +61,69 @@ public class Libretto {
 	 * @return
 	 */
 	public Voto ricercaVoto(String nomeCorso) {
-		Voto risultato=null;
+		/*Voto risultato=null;
 		for(Voto v: voti) {
 			if(v.getNome().equals(nomeCorso)) {
 				risultato=v;
 				break;
 			}
 		}
-		return risultato;
+		return risultato;*/
+		
+		//CON LE MAPPE è PIù EFFICIENTE LA RICERCA
+		return this.votiMap.get(nomeCorso);		
+	}
+	/**
+	 * Verifica se nel libretto c'è gia un voto con lo stesso
+	 * nome e lo stesso voto
+	 * @param v
+	 * @return
+	 */
+	public boolean esisteDuplicato(Voto v) {
+		/*boolean trovato=false;
+		for(Voto voto: this.voti) {
+			if(voto.getNome().equals(v.getNome()) && voto.getVoto()==v.getVoto()) {
+				trovato =true;
+				break;
+			}
+		}
+		return trovato;*/
+		
+		//CON LE MAPPE è PIù EFFICIENTE LA RICERCA
+		Voto trovato=this.votiMap.get(v.getNome());
+		if(trovato==null)
+			return false;
+		if(trovato.getVoto()==v.getVoto()) 
+			return true;
+		else 
+			return false;
+		
+	}
+	/**
+	 *Verifica se nel libretto c'è gia un voto con lo stesso
+	 * nome ma voto diverso
+	 * @param v
+	 * @return
+	 */
+	public boolean esisteConflitto(Voto v) {
+		/*boolean trovato=false;
+		for(Voto voto: this.voti) {
+			if(voto.getNome().equals(v.getNome()) && voto.getVoto()!=v.getVoto()) {
+				trovato =true;
+				break;
+			}
+		}
+		return trovato;*/
+		
+		//CON LE MAPPE è PIù EFFICIENTE LA RICERCA
+		Voto trovato=this.votiMap.get(v.getNome());
+		if(trovato==null)
+			return false;
+		if(trovato.getVoto()!=v.getVoto()) 
+			return true;
+		else 
+			return false;
+		
 	}
 	
 	public String toString() {
