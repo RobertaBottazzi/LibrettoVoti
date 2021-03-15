@@ -3,7 +3,7 @@ package it.polito.tdp.librettovoti.model;
 import java.util.*;
 
 public class Libretto {
-	
+	//svolge il ruolo di Model ossia gestiscono i dati
 	private List<Voto> voti;
 	
 	public Libretto() {
